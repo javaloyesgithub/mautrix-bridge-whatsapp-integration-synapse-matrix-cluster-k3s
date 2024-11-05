@@ -1,0 +1,5 @@
+app_service_config:
+          - name: "Mautrix WhatsApp"
+            type: "mau-trix"
+            ...  # Rest of the configuration
+        
