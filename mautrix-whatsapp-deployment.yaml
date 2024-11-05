@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+        kind: Deployment
+        metadata:
+          name: mautrix-whatsapp
+          namespace: namespace_name
+        spec:
+          replicas: 1
+          selector:
+            matchLabels:
+              app: mautrix-whatsapp
+          template:
+            metadata:
+              labels:
+                app: mautrix-whatsapp
+            spec:
+              containers:
+              - name: mautrix-whatsapp
+                image: dock.mau.dev/mautrix/whatsapp:latest
+                env:
+                  - name: HOMESERVER_URL
+                    value: "http://synapse:8008"
+                  - name: DATABASE_TYPE
+                    value: "sqlite"
+                  - name: DATABASE_PATH
+                    value: "/data/database.db"
+                volumeMounts:
+                  - name: mautrix-data
+                    mountPath: /data
+              volumes:
+                - name: mautrix-data
+                  persistentVolumeClaim:
+                    claimName: mautrix-pv-claim
