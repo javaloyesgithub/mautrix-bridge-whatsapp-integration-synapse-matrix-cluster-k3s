@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+        kind: Deployment
+        metadata:
+          name: synapse
+          namespace: namespace_name
+        spec:
+          replicas: 1
+          selector:
+            matchLabels:
+              app: synapse
+          template:
+            metadata:
+              labels:
+                app: synapse
+            spec:
+              containers:
+              - name: synapse
+                image: matrixdotorg/synapse:latest
+                ports:
+                  - containerPort: 8008
+                env:
+                  - name: SYNAPSE_SERVER_NAME
+                    value: "domain_name"
+                  - name: SYNAPSE_REPORT_STATS
+                    value: "yes"
+                  - name: POSTGRES_DB
+                    value: "synapse"
+                  - name: POSTGRES_USER
+                    value: "postgres_user"
+                  - name: POSTGRES_PASSWORD
+                    value: "postgres_password"
+                  - name: POSTGRES_HOST
+                    value: "postgres"
+                volumeMounts:
+                  - name: synapse-data
+                    mountPath: /data
+              volumes:
+                - name: synapse-data
+                  persistentVolumeClaim:
+                    claimName: synapse-pv-claim
